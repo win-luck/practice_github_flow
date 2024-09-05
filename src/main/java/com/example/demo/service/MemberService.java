@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.config.aop.WriteToReaderDB;
 import com.example.demo.entity.Member;
 import com.example.demo.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,5 +21,11 @@ public class MemberService {
     @Transactional(readOnly = true)
     public Member findById(Long id) {
         return memberRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 회원이 없습니다. id=" + id));
+    }
+
+    @WriteToReaderDB
+    @Transactional
+    public Long saveToReaderDB(Member member) {
+        return memberRepository.save(member).getId();
     }
 }
